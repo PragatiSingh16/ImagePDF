@@ -1,8 +1,7 @@
-import torch
-from transformers import AutoTokenizer, AutoModelWithLMHead
-tokenizer = AutoTokenizer.from_pretrained('t5-base')
-model = AutoModelWithLMHead.from_pretrained('t5-base', return_dict=True)
-text = ("Cake is a flour confection made from flour, sugar, and other ingredients and is usually baked. "
+from transformers import pipeline
+model_name = "sshleifer/distilbart-cnn-12-6"
+summary_pipeline = pipeline('summarization', model=model_name)
+article = """ Cake is a flour confection made from flour, sugar, and other ingredients and is usually baked. "
         "In their oldest forms, cakes were modifications of bread, but cakes now cover a wide range of "
         "preparations that can be simple or elaborate and which share features with desserts such as pastries,"
         " meringues, custards, and pies.The most common ingredients include flour, sugar, eggs, fat "
@@ -14,9 +13,7 @@ text = ("Cake is a flour confection made from flour, sugar, and other ingredient
         "Cake is often served as a celebratory dish on ceremonial occasions, such as weddings, anniversaries, "
         "and birthdays. There are countless cake recipes; some are bread-like, some are rich and elaborate, and"
         " many are centuries old. Cake making is no longer a complicated procedure; while at one time considerable "
-        "labor went into cake making (particularly the whisking of egg foams), baking equipment and directions have"
-        " been simplified so that even the most amateur of cooks may bake a cake.")
-inputs = tokenizer.encode("summarize: " + text, return_tensors='pt', max_length=512, truncation=True)
-summary_ids = model.generate(inputs, max_length=250, min_length=8, length_penalty=5., num_beams=2)
-summary = tokenizer.decode(summary_ids[0])
-print(summary)
+        "labor went into cake making (particularly the whisking of egg foams), baking equipment and directions have
+"""
+generated_summary = summary_pipeline(article, max_length=250, min_length=8, do_sample=False)
+print(generated_summary[0]['summary_text'])

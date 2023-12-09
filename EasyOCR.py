@@ -1,6 +1,5 @@
 import easyocr
 
-
 def image_to_text(image_path, language='en'):
     reader = easyocr.Reader([language])
 
@@ -9,8 +8,7 @@ def image_to_text(image_path, language='en'):
     text = ' '.join([item[1] for item in result])
     return text
 
-
-image_path = 'test.jpg'
+image_path = 'temp_image.jpg'
 result_text = image_to_text(image_path)
 
 print("Text extracted from the image:")
